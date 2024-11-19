@@ -9,6 +9,10 @@ import (
 	"github.com/isette/agora.io-service/runners"
 )
 
+func init() {
+	handlers.LoadEnv()
+}
+
 func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyResponse, error) {
 	fmt.Println("Received body: ", request.Body)
 
@@ -18,6 +22,9 @@ func Handler(request events.APIGatewayProxyRequest) (events.APIGatewayProxyRespo
 func main() {
 	api := gin.Default()
 
+	Port := handlers.GetEnvWithKey("PORT")
+	fmt.Println("Running in http://localhost:" + Port)
+
 	api.GET("/ping", func(c *gin.Context) {
 		c.JSON(200, gin.H{
 			"message": "pong",
@@ -26,6 +33,6 @@ func main() {
 
 	api.GET("rtc/:channelName/:role/:tokentype/:uid/", runners.GetRtcToken)
 
-	api.Run(":" + handlers.GetEnvWithKey("PORT"))
+	api.Run(":" + Port)
 	// lambda.Start(Handler)
 }

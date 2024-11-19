@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	rtctokenbuilder2 "github.com/AgoraIO-Community/go-tokenbuilder/rtctokenbuilder"
-	"github.com/isette/agora.io-service/handlers"
 )
 
 func GenerateRtcToken(channelName, uidStr, tokenType string, role rtctokenbuilder2.Role, expireTimestamp uint32) (rtcToken string, err error) {
@@ -14,8 +13,8 @@ func GenerateRtcToken(channelName, uidStr, tokenType string, role rtctokenbuilde
 	if tokenType == "userAccount" {
 		log.Printf("Building Token with userAccount: %s\n", uidStr)
 		rtcToken, err = rtctokenbuilder2.BuildTokenWithAccount(
-			handlers.GetEnvWithKey("AGORA_APP_ID"),
-			handlers.GetEnvWithKey("AGORA_APP_CERTIFICATE"),
+			GetEnvWithKey("AGORA_APP_ID"),
+			GetEnvWithKey("AGORA_APP_CERTIFICATE"),
 			channelName,
 			uidStr,
 			role,
@@ -33,8 +32,8 @@ func GenerateRtcToken(channelName, uidStr, tokenType string, role rtctokenbuilde
 		uid := uint32(uid64)
 		log.Printf("Building Token with uid: %d\n", uid)
 		rtcToken, err = rtctokenbuilder2.BuildTokenWithUid(
-			handlers.GetEnvWithKey("AGORA_APP_ID"),
-			handlers.GetEnvWithKey("AGORA_APP_CERTIFICATE"),
+			GetEnvWithKey("AGORA_APP_ID"),
+			GetEnvWithKey("AGORA_APP_CERTIFICATE"),
 			channelName,
 			uid,
 			role,
