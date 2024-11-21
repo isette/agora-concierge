@@ -4,8 +4,8 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/isette/agora.io-service/handlers"
-	"github.com/isette/agora.io-service/utils"
+	"github.com/isette/agoraio-service/handlers"
+	"github.com/isette/agoraio-service/utils"
 )
 
 func GetRtcToken(c *gin.Context) {

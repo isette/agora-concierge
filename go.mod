@@ -1,4 +1,4 @@
-module github.com/isette/agora.io-service
+module github.com/isette/agoraio-service
 
 go 1.22.3
 
