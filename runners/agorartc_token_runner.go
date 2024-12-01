@@ -1,16 +1,22 @@
 package runners
 
 import (
+	"fmt"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"github.com/isette/agoraio-service/handlers"
-	"github.com/isette/agoraio-service/utils"
+	"github.com/isette/appointments-concierge/handlers"
+	"github.com/isette/appointments-concierge/utils"
 )
 
 func GetRtcToken(c *gin.Context) {
 	log.Printf("rtc token\n")
-	channelName, tokentype, uidStr, role, expireTimestamp, err := utils.ParseRtcParams(c)
+
+	fmt.Println(c)
+
+	channelName, tokenType, uidStr, role, expireTimestamp, err := utils.ParseRtcParams(c)
+
+	fmt.Println(channelName, uidStr, tokenType, role, expireTimestamp)
 
 	if err != nil {
 		c.Error(err)
@@ -21,7 +27,9 @@ func GetRtcToken(c *gin.Context) {
 		return
 	}
 
-	rtcToken, tokenErr := handlers.GenerateRtcToken(channelName, uidStr, tokentype, role, expireTimestamp)
+	fmt.Println(channelName, uidStr, tokenType, role, expireTimestamp)
+
+	rtcToken, tokenErr := handlers.GenerateRtcToken(channelName, uidStr, tokenType, role, expireTimestamp)
 
 	if tokenErr != nil {
 		log.Println(tokenErr)
@@ -37,4 +45,47 @@ func GetRtcToken(c *gin.Context) {
 			"rtcToken": rtcToken,
 		})
 	}
+}
+
+func GetBothTokens(c *gin.Context) {
+	log.Printf("dual token\n")
+	channelName, tokentype, uidStr, role, expireTimestamp, err := utils.ParseRtcParams(c)
+
+	if err != nil {
+		c.Error(err)
+		c.AbortWithStatusJSON(400, gin.H{
+			"message": "Error Generating RTE token: " + err.Error(),
+			"status":  400,
+		})
+		return
+	}
+
+	rtcToken, rtcTokenErr := handlers.GenerateRteToken(channelName, uidStr, tokentype, role, expireTimestamp)
+
+	rtmToken, rtmTokenErr := handlers.GenerateRtmToken(channelName, uidStr, tokentype, role, expireTimestamp)
+
+	if rtcTokenErr != nil {
+		log.Println(rtcTokenErr) // token failed to generate
+		c.Error(rtcTokenErr)
+		errMsg := "Error Generating RTC token - " + rtcTokenErr.Error()
+		c.AbortWithStatusJSON(400, gin.H{
+			"status": 400,
+			"error":  errMsg,
+		})
+	} else if rtmTokenErr != nil {
+		log.Println(rtmTokenErr) // token failed to generate
+		c.Error(rtmTokenErr)
+		errMsg := "Error Generating RTC token - " + rtmTokenErr.Error()
+		c.AbortWithStatusJSON(400, gin.H{
+			"status": 400,
+			"error":  errMsg,
+		})
+	} else {
+		log.Println("RTC Token generated")
+		c.JSON(200, gin.H{
+			"rtcToken": rtcToken,
+			"rtmToken": rtmToken,
+		})
+	}
+
 }

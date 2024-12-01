@@ -9,7 +9,7 @@ import (
 	rtctokenbuilder2 "github.com/AgoraIO-Community/go-tokenbuilder/rtctokenbuilder"
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
-	"github.com/isette/agoraio-service/handlers"
+	"github.com/isette/appointments-concierge/handlers"
 )
 
 func init() {
