@@ -9,12 +9,19 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func ParseRtcParams(c *gin.Context) (channelName, tokentype, uidStr string, role rtctokenbuilder2.Role, expireTimestamp uint32, err error) {
+func ParseRtcParams(c *gin.Context) (channelName, tokenType, uidStr string, role rtctokenbuilder2.Role, expireTimestamp uint32, err error) {
 	channelName = c.Param("channelName")
 	roleStr := c.Param("role")
-	tokentype = c.Param("tokentype")
+	tokenType = c.Param("tokenType")
 	uidStr = c.Param("uid")
 	expireTime := c.DefaultQuery("expiry", "3600")
+
+	fmt.Println("ParseRtcParams")
+	fmt.Println("channelName", channelName)
+	fmt.Println("roleStr", roleStr)
+	fmt.Println("tokentype", tokenType)
+	fmt.Println("uidStr", uidStr)
+	fmt.Println("expireTime", expireTime)
 
 	if roleStr == "publisher" {
 		role = rtctokenbuilder2.RolePublisher
@@ -31,5 +38,5 @@ func ParseRtcParams(c *gin.Context) (channelName, tokentype, uidStr string, role
 	currentTimestamp := uint32(time.Now().UTC().Unix())
 	expireTimestamp = currentTimestamp + expireTimeInSeconds
 
-	return channelName, tokentype, uidStr, role, expireTimestamp, err
+	return channelName, tokenType, uidStr, role, expireTimestamp, err
 }
